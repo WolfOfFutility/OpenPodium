@@ -49,6 +49,25 @@ func podiumLogin(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, "Welcome back, %v!", login.Username)
 }
 
+func addUserSecret(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w) 
+	
+	userName := "Admin"
+	testSecret := map[string]any{
+		"DevOps_Secret": "devopssecret1",
+	}
+
+	writeSecretToUserVault(userName, testSecret)
+}
+
+func getUserSecrets(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w) 
+	
+	userName := "Admin"
+
+	readSecretsFromUserVault(userName)
+}
+
 // Placeholder to login to Azure / Microsoft-based authentication
 func azureLogin(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
