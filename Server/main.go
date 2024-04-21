@@ -4,6 +4,7 @@ import (
 	// "fmt"
 	"net/http"
 	"github.com/WolfOfFutility/OpenPodium/Server/handlers"
+	"github.com/WolfOfFutility/OpenPodium/Server/testers"
 )
 
 // Handle CORS - This should be locked down in the future
@@ -21,6 +22,7 @@ func testSecretVault() {
 func main() {
 	testSecretVault()
 	handlers.testHandlerModule()
+	tester.testHandlerModule()
 
 	// runVault()
 
