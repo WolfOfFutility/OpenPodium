@@ -22,7 +22,7 @@ func testSecretVault() {
 func main() {
 	testSecretVault()
 	handlers.testHandlerModule()
-	tester.testHandlerModule()
+	testers.testHandlerModule()
 
 	// runVault()
 
