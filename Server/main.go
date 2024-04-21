@@ -3,6 +3,7 @@ package main
 import (
 	// "fmt"
 	"net/http"
+	"github.com/WolfOfFutility/OpenPodium/handlers"
 )
 
 // Handle CORS - This should be locked down in the future
@@ -19,6 +20,8 @@ func testSecretVault() {
 // Main function - start server
 func main() {
 	testSecretVault()
+	handlers.testHandlerModule()
+
 	// runVault()
 
 	// Server start message

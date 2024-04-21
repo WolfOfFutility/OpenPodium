@@ -1,4 +1,4 @@
-module openPodiumServer
+module github.com/WolfOfFutility/OpenPodium
 
 go 1.22.2
 
