@@ -3,7 +3,7 @@ package main
 import (
 	// "fmt"
 	"net/http"
-	"github.com/WolfOfFutility/OpenPodium/handlers"
+	"github.com/WolfOfFutility/OpenPodium/Server/handlers"
 )
 
 // Handle CORS - This should be locked down in the future
