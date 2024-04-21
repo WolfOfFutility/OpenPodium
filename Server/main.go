@@ -12,7 +12,7 @@ func enableCors(w *http.ResponseWriter) {
 }
 
 func testSecretVault() {
-	// writeSecretToUserVault("Admin", map[string]any{"SecondToken": "Token1234"})
+	writeSecretToUserVault("Admin", map[string]any{"SecondToken": "Token1234"})
 	readSecretsFromUserVault("Admin")
 	//removeSecretFromUserVault("Admin", "SecondToken")
 }
