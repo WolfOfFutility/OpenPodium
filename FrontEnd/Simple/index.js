@@ -4,10 +4,10 @@ window.onload = (event) => {
 
     // getHello();
 
-    podiumLogin("Admin", "admin")
+    // podiumLogin("Admin", "admin")
     // addUserSecret();
 
-    readUserSecrets();
+    // readUserSecrets();
 }
 
 // Constructor for generic API requests
@@ -47,7 +47,7 @@ const APIRequest = async (url, method = "GET", extraHeaders = {}, bodyData = {},
     
     // Call the api, allow for error handling and callbacks
     await fetch(url, APISettings)
-    .then(response => response.text())
+    .then(response => response.json())
     .then(res => {
         try {
             successCallback(res);
@@ -82,8 +82,12 @@ const getHello = async () =>{
     await APIRequest("http://localhost:4000/hello", "GET", {}, {}, (res) => handleAPISuccess(res), (err) => handleAPIFailure(err));
 }
 
-const podiumLogin = async (username, password) => {
+const podiumLogin = async () => {
+    let username = document.getElementById("username-field").value;
+    let password = document.getElementById("password-field").value;
+
     await APIRequest("http://localhost:4000/login", "POST", {}, {username, password}, (res) => handleAPISuccess(res), (err) => handleAPIFailure(err))
+    readUserSecrets()
 }
 
 const addUserSecret = async () => {

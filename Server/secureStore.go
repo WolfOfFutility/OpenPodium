@@ -17,6 +17,8 @@ import (
 	"github.com/hashicorp/vault-client-go/schema"
 )
 
+func checkSSOToken(userName string, token string) {}
+
 // Handles the C and U functions in C.R.U.D. for the user's secret vault
 func writeSecretToUserVault(userName string, userSecret map[string]any) {
 	ctx := context.Background()
@@ -38,7 +40,9 @@ func writeSecretToUserVault(userName string, userSecret map[string]any) {
 	// check the users current secret store
 	userSecretList, err := readSecretsFromUserVault(userName)
 	if err != nil {
-		log.Fatal(err)
+		userSecretList = make(map[string]any)
+		log.Println(err)
+		// log.Fatal(err)
 	}
 
 	// for each of the secrets sent through, save them to the user secret list variable
@@ -58,7 +62,7 @@ func writeSecretToUserVault(userName string, userSecret map[string]any) {
 		log.Fatal(err)
 	}
 
-	// log.Println("secret written successfully")
+	log.Println("secret written successfully")
 }
 
 // Handles the R functions in the C.R.U.D. for the user's secret vault
@@ -71,12 +75,14 @@ func readSecretsFromUserVault(userName string) (map[string]any, error) {
 		vault.WithRequestTimeout(30*time.Second),
 	)
 	if err != nil {
+		log.Println("Client Connect")
 		log.Fatal(err)
 		return nil, err
 	}
 
 	// authenticate with a root token (insecure)
 	if err := client.SetToken("my-token"); err != nil {
+		log.Println("Set Token")
 		log.Fatal(err)
 		return nil, err
 	}
@@ -84,7 +90,9 @@ func readSecretsFromUserVault(userName string) (map[string]any, error) {
 	// read the secret
 	s, err := client.Secrets.KvV2Read(ctx, "user-secrets", vault.WithMountPath("secret"))
 	if err != nil {
-		log.Fatal(err)
+		log.Println("Read Secrets")
+		// log.Fatal(err)
+		log.Println(err)
 		return nil, err
 	}
 
@@ -97,7 +105,7 @@ func readSecretsFromUserVault(userName string) (map[string]any, error) {
 		log.Println("no secrets could be found for user.")
 		return make(map[string]any), nil
 	} else {
-		// log.Println("secrets retrieved:", secretList[userName])
+		log.Println("secrets retrieved:", secretList[userName])
 		return secretList[userName].(map[string]any), nil
 	}
 }

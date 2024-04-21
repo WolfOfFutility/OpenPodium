@@ -1,10 +1,8 @@
 package main
 
 import (
-	// "fmt"
+	"fmt"
 	"net/http"
-	"github.com/WolfOfFutility/OpenPodium/Server/handlers"
-	"github.com/WolfOfFutility/OpenPodium/Server/testers"
 )
 
 // Handle CORS - This should be locked down in the future
@@ -20,25 +18,29 @@ func testSecretVault() {
 
 // Main function - start server
 func main() {
-	testSecretVault()
-	handlers.testHandlerModule()
-	testers.testHandlerModule()
+	// testSecretVault()
 
 	// runVault()
 
 	// Server start message
-	// listenPort := 4000
-	//fmt.Printf("Running server on port %v\n", listenPort)
+	listenPort := 4000
+	fmt.Printf("Running server on port %v\n", listenPort)
 	
 	// Endpoint Handlers
+	http.HandleFunc("/login", podiumLogin)
+
+	// Endpoints - Secret Management
+	http.HandleFunc("/secrets", getUserSecrets)
+	http.HandleFunc("/secrets/new", addUserSecret)
+	http.HandleFunc("/secrets/remove", removeUserSecret)
+
 	// http.HandleFunc("/", index)
 	// http.HandleFunc("/headers", headers)
 	// http.HandleFunc("/hello", hello)
-	// http.HandleFunc("/login", podiumLogin)
+	
 	// http.HandleFunc("/azure", azureLogin)
-	// http.HandleFunc("/secrets/new", addUserSecret)
-	// http.HandleFunc("/secrets", getUserSecrets)
+	
 
 	// Start server and listen on the specified port
-	//http.ListenAndServe(fmt.Sprintf(":%v", listenPort), nil)
+	http.ListenAndServe(fmt.Sprintf(":%v", listenPort), nil)
 }

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"github.com/google/uuid"
+	"log"
 )
 
 func headers(w http.ResponseWriter, req *http.Request) {
@@ -41,12 +43,19 @@ func podiumLogin(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	
+	// Check for logins
 	if login.Username != "Admin" || login.Password != "admin" {
 		http.Error(w, "That is not a valid login. Please try again.", 500)
 		return
 	}
 
-	fmt.Fprintf(w, "Welcome back, %v!", login.Username)
+	// Set User SSOToken
+	SSOToken := uuid.New()
+	writeSecretToUserVault(login.Username, map[string]any{"SSOToken": SSOToken})
+
+	json.NewEncoder(w).Encode(map[string]any{"Message": fmt.Sprintf("Welcome back, %v!", login.Username), "SSOToken": SSOToken})
+
+	//fmt.Fprintf(w, "Welcome back, %v!", login.Username)
 }
 
 func addUserSecret(w http.ResponseWriter, req *http.Request) {
@@ -65,7 +74,31 @@ func getUserSecrets(w http.ResponseWriter, req *http.Request) {
 	
 	userName := "Admin"
 
-	readSecretsFromUserVault(userName)
+	userSecrets, err := readSecretsFromUserVault(userName)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Pull SSOToken out of the secret store that is returned to the user
+	showableSecrets := make(map[string]any)
+	for key, value := range userSecrets {
+		if key != "SSOToken" {
+			showableSecrets[key] = value
+		}
+	}
+
+	// If no SSOToken is sent, return an error
+	if userSecrets["SSOToken"] == nil {
+		json.NewEncoder(w).Encode(map[string]any{"Code": 400, "Message": "Invalid SSOToken, please login."})
+	} else{
+		json.NewEncoder(w).Encode(showableSecrets)
+	}
+}
+
+func removeUserSecret(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+
+	
 }
 
 // Placeholder to login to Azure / Microsoft-based authentication
