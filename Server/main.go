@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -11,28 +12,33 @@ func enableCors(w *http.ResponseWriter) {
 }
 
 func testSecretVault() {
-	writeSecretToUserVault("Admin", map[string]any{"SecondToken": "Token1234"})
-	readSecretsFromUserVault("Admin")
-	//removeSecretFromUserVault("Admin", "SecondToken")
+	// enableUserAuth()
+	// createVaultUser(Login{Username: "Admin", Password: "admin"}, Login{Username: "root", Password: "root"})
+	
+	auth, err := loginVaultUser(Login{Username: "Admin", Password: "admin"})
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	log.Println(auth)
 }
 
 // Main function - start server
 func main() {
-	// testSecretVault()
-
-	// runVault()
+	testSecretVault()
 
 	// Server start message
 	listenPort := 4000
 	fmt.Printf("Running server on port %v\n", listenPort)
 	
 	// Endpoint Handlers
-	http.HandleFunc("/login", podiumLogin)
+	// http.HandleFunc("/login", podiumLogin)
 
 	// Endpoints - Secret Management
-	http.HandleFunc("/secrets", getUserSecrets)
-	http.HandleFunc("/secrets/new", addUserSecret)
-	http.HandleFunc("/secrets/remove", removeUserSecret)
+	// http.HandleFunc("/secrets", getUserSecrets)
+	// http.HandleFunc("/secrets/new", addUserSecret)
+	// http.HandleFunc("/secrets/remove", removeUserSecret)
 
 	// http.HandleFunc("/", index)
 	// http.HandleFunc("/headers", headers)
