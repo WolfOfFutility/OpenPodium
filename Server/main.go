@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"log"
+	// "log"
 	"net/http"
 )
 
@@ -11,29 +11,21 @@ func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }
 
-func testSecretVault() {
-	// enableUserAuth()
-	// createVaultUser(Login{Username: "Admin", Password: "admin"}, Login{Username: "root", Password: "root"})
-	
-	auth, err := loginVaultUser(Login{Username: "Admin", Password: "admin"})
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-
-	log.Println(auth)
+func initSecretVault() {
+	enableUserAuth()
+	createVaultUser(Login{Username: "Admin", Password: "admin"}, Login{Username: "root", Password: "root"})
 }
 
 // Main function - start server
 func main() {
-	testSecretVault()
+	initSecretVault()
 
 	// Server start message
-	listenPort := 4000
+	listenPort := 8080
 	fmt.Printf("Running server on port %v\n", listenPort)
 	
 	// Endpoint Handlers
-	// http.HandleFunc("/login", podiumLogin)
+	http.HandleFunc("/login", podiumLogin)
 
 	// Endpoints - Secret Management
 	// http.HandleFunc("/secrets", getUserSecrets)

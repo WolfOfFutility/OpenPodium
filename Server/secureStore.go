@@ -44,9 +44,9 @@ func enableUserAuth() {
 }
 
 // Login to the HashiCorp Vault with a Username and Password
-func loginVaultUser(login Login) (AuthUser, error) {
+func loginVaultUser(login Login) (AuthUser, int32, error) {
 	if login.Username == "root" && login.Password == "root" { // Allows for root login (for now)
-		return AuthUser{Username: login.Username, ClientToken: "my-token"}, nil
+		return AuthUser{Username: login.Username, ClientToken: "my-token"}, 200, nil
 	} else {
 		// Builds the API Request for the login
 		apiBody := map[string]any {
@@ -55,9 +55,12 @@ func loginVaultUser(login Login) (AuthUser, error) {
 	
 		// Sends the API Request, parses the response
 		loginUserResponse, err := makeAPIRequest("POST", fmt.Sprintf("http://127.0.0.1:8200/v1/auth/userpass/login/%v", login.Username), nil, apiBody)
-		if err != nil {
-			log.Println("Login User Response Error: ", err.Error())
-			return AuthUser{}, err
+		
+		// Handle any errors or warnings from the response
+		errCode, handleAPIErr := handleVaultAPIResponse(err, loginUserResponse, "Login User API", "auth")
+		if handleAPIErr != nil {
+			log.Println(handleAPIErr);
+			return AuthUser{}, errCode, handleAPIErr
 		}
 
 		// Create the Auth User object so that the Client Token is passed.
@@ -66,16 +69,17 @@ func loginVaultUser(login Login) (AuthUser, error) {
 			ClientToken: loginUserResponse["auth"].(map[string]interface{})["client_token"].(string),
 		}
 	
-		return authUser, nil
+		// If nothing interrupts this, pass the auth object and a success code
+		return authUser, 200, nil
 	}
 }
 
 // Create a User within a HashiCorp Vault
 func createVaultUser(loginToCreate Login, loginToAdminister Login) (error) {
 	// Login to the Vault, get the client token
-	auth, err := loginVaultUser(loginToAdminister)
+	auth, errCode, err := loginVaultUser(loginToAdminister)
 	if err != nil {
-		log.Println("Create User Error - Getting Client Token: ", err.Error())
+		log.Println("Create User Error - Getting Client Token: ", errCode, " - ", err.Error())
 		return err
 	}
 

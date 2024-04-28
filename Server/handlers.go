@@ -1,11 +1,11 @@
 package main
 
 import (
-	// "encoding/json"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	// "github.com/google/uuid"
-	// "log"
+	"log"
 )
 
 func headers(w http.ResponseWriter, req *http.Request) {
@@ -20,6 +20,37 @@ func hello(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
 
 	fmt.Fprintf(w, "hello\n")
+}
+
+// Handle a login from the front end
+func podiumLogin(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+
+	// Initialise Request Object Pointer
+	var parsedRequest *Login
+	
+	// Parse Request Body
+	err := json.NewDecoder(req.Body).Decode(&parsedRequest)
+	if err != nil {
+		log.Println("Decode Error: ", err.Error())
+	}
+
+	// Use Request body to pass credentials to login, pass resulting auth object
+	auth, errCode, err := loginVaultUser(Login{Username: parsedRequest.Username, Password: parsedRequest.Password})
+	if err != nil { // ** May need to work on the logic here, give users a more intuitive response
+		log.Println("Login Error: ", errCode, " - ", err.Error())
+
+		errorMessage := "Login Failure."
+
+		if errCode == 400 {
+			errorMessage = "Invalid username or password. Please try again."
+		}
+		
+		json.NewEncoder(w).Encode(map[string]any{"Error": errorMessage, "ErrorCode": errCode})
+	} else {
+		log.Println("Return Auth Values...")
+		json.NewEncoder(w).Encode(auth)
+	}
 }
 
 func removeUserSecret(w http.ResponseWriter, req *http.Request) {

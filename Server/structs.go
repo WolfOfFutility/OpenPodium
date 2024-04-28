@@ -20,3 +20,9 @@ type PolicySettings struct {
 	path string
 	capabilities string
 }
+
+// type VaultAPIResponse struct {
+// 	data map[string]any
+// 	errors map[string]any
+// 	warnings map[string]any
+// }

@@ -65,28 +65,30 @@ func makeAPIRequest(method string, URI string, headers http.Header, body map[str
 }
 
 // Handle any of the Vault API Responses - ** Needs Work
-func handleVaultAPIResponse(apiResponse map[string]any, messagePrefix string) (map[string]any, error) {
-	if apiResponse["errors"] != nil {
+func handleVaultAPIResponse(apiError error, apiResponse map[string]any, messagePrefix string, primaryIndex string) (int32, error) {
+	if apiError != nil { // Handle existing errors that have come through
+		return 500, fmt.Errorf("%v Response Error: %v", messagePrefix, apiError.Error())
+	} else if apiResponse["errors"] != nil { // Handle errors that are in the response object
 		errorMessages := apiResponse["errors"].([]interface{})
 
 		for _, value := range errorMessages {
-			return nil, fmt.Errorf("%v Response Error: %v", messagePrefix, value)
+			return 400, fmt.Errorf("%v Response Error: %v", messagePrefix, value)
 		}
 
-		return nil, nil
+		return 0, nil
 
-	} else if apiResponse["warnings"] != nil{
+	} else if apiResponse["warnings"] != nil{ // Handle warnings that are in the response object
 		warningMessages := apiResponse["warnings"].([]interface{})
 
 		for _, value := range warningMessages {
-			return nil, fmt.Errorf("%v Response Warning: %v", messagePrefix, value)
+			return 300, fmt.Errorf("%v Response Warning: %v", messagePrefix, value)
 		}
 
-		return nil, nil
+		return 0, nil
 
-	} else if apiResponse["data"] == nil {
-		return nil, fmt.Errorf("%v Nil Reponse Error", messagePrefix)
+	} else if apiResponse[primaryIndex] == nil { // handle the primary index (i.e. ["data"] or ["auth"]) being nil
+		return 100, fmt.Errorf("%v Nil Reponse Error", messagePrefix)
 	} else {
-		return apiResponse, nil
+		return 0, nil
 	}
 }
