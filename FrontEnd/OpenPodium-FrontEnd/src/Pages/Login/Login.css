@@ -1,0 +1,68 @@
+#login-box {
+    height: 300px !important;
+    width: 300px !important;
+    background: #333;
+}
+
+#login-box-button-group {
+    height: 30px;
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: calc(300px - 30px - 100px - 50px - 45px)
+}
+
+#login-box-button-group button {
+    outline: 0;
+    margin: 10px;
+    width: 100px;
+}
+
+#login-box .input-group {
+    height: 50px;
+    width: 300px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#login-box .input-group label {
+    margin-left: 20px;
+    width: 100px;
+    color: #DEDEDE;
+    font-weight: bold;
+}
+
+#login-box .input-group input {
+    outline: 2px solid transparent;
+    border: none;
+    height: 30px;
+    width: calc(300px - 40px - 100px);
+    text-indent: 5px;
+    transition-duration: 0.2s;
+}
+
+#login-box .input-group input:focus {
+    outline: 2px solid dodgerblue;
+}
+
+.title-box {
+    height: 50px;
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.title-box h2 {
+    padding: 0;
+    margin: 0;
+    outline: 0;
+    color: #DEDEDE;
+}
+
+

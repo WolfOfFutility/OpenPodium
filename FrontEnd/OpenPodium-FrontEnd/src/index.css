@@ -4,5 +4,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    background: lightblue;
+    /* background: lightblue; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
