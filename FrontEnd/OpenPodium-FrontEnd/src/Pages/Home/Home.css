@@ -1,0 +1,75 @@
+#home-wrapper {
+    height: 100vh;
+    width: 100vw;
+    background: lightblue;
+    display: flex;
+    flex-direction: row;
+}
+
+#menu-wrapper {
+    height: 90vh;
+    width: 300px;
+    background: #333;
+    margin-top: 5vh;
+    margin-left: 30px;
+}
+
+#menu-wrapper-title {
+    height: 60px;
+    width: 300px;
+    color: #DEDEDE;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#menu-wrapper-title h2 {
+    outline: 0;
+    padding: 0;
+    margin: 0;
+}
+
+#menu-wrapper .menu-item {
+    height: 50px;
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-indent: 20px;
+    color: #DEDEDE;
+    cursor: pointer;
+    transition-duration: 0.2s;
+    font-weight: semi-bold;
+    letter-spacing: 0.5px;
+    text-decoration: none !important; /* Override Text Decoration from Link Element */
+}
+
+#menu-wrapper .menu-item-active {
+    height: 50px;
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-indent: 20px;
+    color: #DEDEDE;
+    cursor: pointer;
+    transition-duration: 0.2s;
+    font-weight: semi-bold;
+    letter-spacing: 0.5px;
+    text-decoration: none !important; /* Override Text Decoration from Link Element */
+    background-color: midnightblue;
+}
+
+#menu-wrapper .menu-item:hover, #menu-wrapper .menu-item-active:hover {
+    background-color: dodgerblue;
+}
+
+#content-wrapper {
+    height: 90vh;
+    width: calc(100vw - 300px - 90px);
+    background: #CCC;
+    margin-top: 5vh;
+    margin-left: 30px;
+}

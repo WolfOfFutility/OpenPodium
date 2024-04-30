@@ -12,6 +12,7 @@ import {
 // Page Imports
 import App from './App.tsx'
 import Login from "./Pages/Login/Login.tsx"
+import Home from './Pages/Home/Home.tsx'
 
 // Initialise Pages
 const router = createBrowserRouter([
@@ -23,6 +24,11 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+    children: []
+  },
+  {
+    path: "/home",
+    element: <Home />,
     children: []
   }
 ])

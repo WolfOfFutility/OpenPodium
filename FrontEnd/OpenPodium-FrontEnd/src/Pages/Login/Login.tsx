@@ -19,7 +19,7 @@ const sendLoginRequest = async (username: string, password: string, navigate: Na
 
 // Handle the success of the Login Request, navigate and pass the client token
 const successNavigate = (res: AuthObject, navigate: NavigateFunction) => {
-    navigate("/", {state: {auth: res}})
+    navigate("/home", {state: {auth: res}})
 }
 
 // Handle the failure of the login request
